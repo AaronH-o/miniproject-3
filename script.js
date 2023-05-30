@@ -13,6 +13,7 @@ function writePassword() {
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
+
 function generatePassword() {
 
     var passwordLength = prompt("How many characters would you like your password to be? Please choose between 8 and 128.");
@@ -20,26 +21,32 @@ function generatePassword() {
     while(passwordLength < 8 || passwordLength > 128) {
       passwordLength = prompt("Number is not between 8 and 128. Please try again.");
     }
+    
+    var lowercase = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    var uppercase = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L","M","N","O","P","Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    var numbers = ["0","1","2","3","4","5","6","7","8","9"];
+    var specialCharacters  = ["!","@","#","$","%","^","&","*","(",")","_","-","+","=","{","}","[","]","|","\\",":",";","\"","'","<",">","?","/","~","`"];
+
 
     // todo: fix this
     do {
       var characterTypes = [];
-      var possibleCharacters = [];
+      var possibleCharacters = 0;
       if(confirm("Would you like to include lowercase letters?")) {
-        characterTypes.push("lowercase");
-        possibleCharacters.push("abcdefghijklmnopqrstuvwxyz");
+        characterTypes += lowercase;
+        possibleCharacters += 26;
       }
       if(confirm("Would you like to include uppercase letters?")) {
-        characterTypes.push("uppercase");
-        possibleCharacters.push("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        characterTypes += uppercase;
+        possibleCharacters += 26;
       }
       if(confirm("Would you like to include numbers?")) {
-        characterTypes.push("numbers");
-        possibleCharacters.push("0123456789");
+        characterTypes += numbers;
+        possibleCharacters += 10;
       }
       if(confirm("Would you like to include special characters?")) {
-        characterTypes.push("special characters");
-        possibleCharacters.push("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
+        characterTypes += specialCharacters;
+        possibleCharacters += 32;
       }
       // Check if at least one character type is selected
       if (characterTypes.length === 0) {
@@ -52,9 +59,16 @@ function generatePassword() {
     // Create password
     var password = "";
     for (var i = 0; i < passwordLength; i++) {
-      var randomCharacterType = characterTypes[Math.floor(Math.random() * characterTypes.length)];
-      var randomCharacter = possibleCharacters[characterTypes.indexOf(randomCharacterType)][Math.floor(Math.random() * possibleCharacters[characterTypes.indexOf(randomCharacterType)].length)];
-      password += randomCharacter;
+      var random = Math.floor(Math.random() * possibleCharacters.length);
+      if(random < 26) { // lowercase
+        password += lowercase[random];
+      } else if(random < 52) { // uppercase 
+        password += uppercase[random + 26];
+      } else if(random < 62) { // numbers
+        password += numbers[random + 52];
+      } else { // special characters
+        password += specialCharacters[random + 62];
+      }
     }
   
     // Return password
